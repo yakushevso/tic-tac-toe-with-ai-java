@@ -1,0 +1,20 @@
+# course config files
+*.yaml
+
+# gradle
+.gradle/
+/gradle/
+/gradlew
+/gradlew.bat
+build
+out
+
+# idea config
+.idea
+
+# stages
+/Tic-Tac-Toe with AI (Java)/Initial setup/
+/Tic-Tac-Toe with AI (Java)/Easy does it/
+/Tic-Tac-Toe with AI (Java)/Watch 'em fight/
+/Tic-Tac-Toe with AI (Java)/Signs of intelligence/
+/Tic-Tac-Toe with AI (Java)/An undefeated champion/
