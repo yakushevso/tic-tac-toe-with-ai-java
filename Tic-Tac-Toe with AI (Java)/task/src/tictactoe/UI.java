@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class UI {
     private final Scanner SC = new Scanner(System.in);
 
+    @SuppressWarnings("unused")
     public int readFieldSize() {
         while (true) {
             if (SC.hasNextInt()) {
@@ -21,42 +22,16 @@ public class UI {
         return SC.nextLine();
     }
 
-    public char[][] testField() {
-        System.out.println("Enter the cells:");
-        char[][] inputField = new char[3][3];
-        String input;
+    public void makeMove(Field field, int[] move, char userChar) {
+        int x = move[0];
+        int y = move[1];
 
-        do {
-            input = SC.nextLine();
-
-            if (input.length() == 9) {
-                for (int i = 0; i < 9; i++) {
-                    int row = i / 3;
-                    int col = i % 3;
-                    inputField[row][col] = input.charAt(i);
-                }
-            } else {
-                System.out.println("The string length is incorrect. 9 characters are expected.");
-            }
-        } while (input.length() != 9);
-
-        return inputField;
+        field.add(x, y, userChar);
     }
 
-    public char userChar(char[][] field) {
-        int xCount = 0;
-        int oCount = 0;
+    public int[] readMoveBot(Bot bot, char[][] field) {
+        System.out.println("Making move level \"easy\"");
 
-        for (char[] inputArr : field) {
-            for (char anInputArr : inputArr) {
-                if (anInputArr == 'X') {
-                    xCount++;
-                } else if (anInputArr == 'O') {
-                    oCount++;
-                }
-            }
-        }
-
-        return  xCount <= oCount ? 'X' : 'O';
+        return bot.makeMove(field);
     }
 }

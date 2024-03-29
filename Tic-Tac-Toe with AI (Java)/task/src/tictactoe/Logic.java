@@ -2,22 +2,16 @@ package tictactoe;
 
 public class Logic {
     private char[][] field;
-    private int x;
-    private int y;
 
     public void update(char[][] field) {
         this.field = field;
     }
 
     public boolean isNotFinished() {
-        return !(isWinner() || isDraw());
+        return !(xWins() || oWins() || isDraw());
     }
 
-    private boolean isWinner() {
-        return xWins() || oWins();
-    }
-
-    public boolean isDraw() {
+    private boolean isDraw() {
         for (char[] chars : field) {
             for (int j = 0; j < field[0].length; j++) {
                 if ((chars[j] == '_') || (chars[j] == ' ')) {
@@ -26,7 +20,7 @@ public class Logic {
             }
         }
 
-        return !isWinner();
+        return !(xWins() || oWins());
     }
 
     private boolean xWins() {
@@ -37,7 +31,7 @@ public class Logic {
         return checkRows('O') || checkColumns('O') || checkDiagonals('O');
     }
 
-    public boolean checkRows(char input) {
+    private boolean checkRows(char input) {
         for (char[] row : field) {
             boolean rowMatches = true;
 
@@ -56,7 +50,7 @@ public class Logic {
         return false;
     }
 
-    public boolean checkColumns(char input) {
+    private boolean checkColumns(char input) {
         for (int j = 0; j < field[0].length; j++) {
             boolean columnMatches = true;
 
@@ -75,7 +69,7 @@ public class Logic {
         return false;
     }
 
-    public boolean checkDiagonals(char input) {
+    private boolean checkDiagonals(char input) {
         boolean mainDiagonal = true;
         boolean secondaryDiagonal = true;
 
@@ -92,23 +86,26 @@ public class Logic {
         return mainDiagonal || secondaryDiagonal;
     }
 
-    public boolean isValidMove(String move) {
-        return isConvertToIntegers(move) && isCorrectRange() && isEmpty();
+    public boolean isValidMove(int[] move) {
+        return isCorrectRange(move) && isEmpty(move);
     }
 
-    private boolean isConvertToIntegers(String move) {
+    public int[] convertToIntegers(String move) {
         try {
             String[] chars = move.split(" ");
-            this.x = Integer.parseInt(chars[0]);
-            this.y = Integer.parseInt(chars[1]);
-            return true;
+            int x = Integer.parseInt(chars[0]);
+            int y = Integer.parseInt(chars[1]);
+            return new int[]{x, y};
         } catch (Exception e) {
             System.out.println("You should enter numbers!");
-            return false;
+            return null;
         }
     }
 
-    private boolean isCorrectRange() {
+    private boolean isCorrectRange(int[] move) {
+        int x = move[0];
+        int y = move[1];
+
         if (x <= 3 && x >= 1 && y <= 3 && y >= 1) {
             return true;
         } else {
@@ -117,7 +114,10 @@ public class Logic {
         }
     }
 
-    private boolean isEmpty() {
+    private boolean isEmpty(int[] move) {
+        int x = move[0];
+        int y = move[1];
+
         if (field[x - 1][y - 1] == ' ' || field[x - 1][y - 1] == '_') {
             return true;
         } else {
@@ -126,46 +126,7 @@ public class Logic {
         }
     }
 
-    public String winner() {
-        if (isWinner()) {
-            if (xWins()) {
-                return "X";
-            }
-            return "O";
-        }
-        return "There is no winner!";
-    }
-
-    private boolean fieldIsLegal() {
-        if (xWins() && oWins()) {
-            return false;
-        }
-
-        int xCount = 0;
-        int oCount = 0;
-
-        for (char[] inputArr : field) {
-            for (char anInputArr : inputArr) {
-                if (anInputArr == 'X') {
-                    xCount++;
-                } else if (anInputArr == 'O') {
-                    oCount++;
-                }
-            }
-        }
-
-        return xCount - oCount < 2 && xCount - oCount > -2;
-    }
-
     public void printResult() {
-        if (isDraw()) {
-            System.out.println("Draw");
-        } else if (!fieldIsLegal()) {
-            System.out.println("Impossible");
-        } else if (isNotFinished()) {
-            System.out.println("Game not finished");
-        } else {
-            System.out.println(winner() + " wins");
-        }
+        System.out.println(isDraw() ? "Draw" : xWins() ? "X wins" : "O wins");
     }
 }

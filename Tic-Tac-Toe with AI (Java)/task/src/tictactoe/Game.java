@@ -16,28 +16,40 @@ public class Game {
     }
 
     private void start() {
-        field.initField(ui.testField());
-        field.printField();
+        field.init();
+        field.print();
         logic.update(field.getState());
 
-        char userChar = ui.userChar(field.getState());
+        Bot bot = new EasyBot(3);
+        boolean playerTurn = true;
 
         while (logic.isNotFinished()) {
-            String move = ui.readMove();
+            int[] move;
+
+            if (playerTurn) {
+                move = logic.convertToIntegers(ui.readMove());
+
+                if (move == null) {
+                    continue;
+                }
+            } else {
+                move = ui.readMoveBot(bot, field.getState());
+            }
 
             if (logic.isValidMove(move)) {
-                field.makeMove(move, userChar);
-                logic.update(field.getState());
-
-                if (logic.isNotFinished()) {
-                    System.out.println("Game not finished");
+                if (playerTurn) {
+                    ui.makeMove(field, move, 'X');
+                } else {
+                    ui.makeMove(field, move, 'O');
                 }
 
-                field.printField();
-                logic.printResult();
+                logic.update(field.getState());
+                field.print();
 
-                userChar = userChar == 'X' ? 'O' : 'X';
+                playerTurn = !playerTurn;
             }
         }
+
+        logic.printResult();
     }
 }

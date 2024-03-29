@@ -20,19 +20,15 @@ public class Field {
         return field;
     }
 
-    public void initField(char[][] initialState) {
-        if (initialState != null) {
-            field = initialState;
-        } else {
-            field = new char[size][size];
+    public void init() {
+        field = new char[size][size];
 
-            for (char[] row : field) {
-                Arrays.fill(row, ' ');
-            }
+        for (char[] row : field) {
+            Arrays.fill(row, ' ');
         }
     }
 
-    public void printField() {
+    public void print() {
         System.out.println(horLine);
 
         for (char[] inputArr : field) {
@@ -48,10 +44,7 @@ public class Field {
         System.out.println(horLine);
     }
 
-    public void makeMove(String move, char userChar) {
-        String[] chars = move.split(" ");
-        int x = Integer.parseInt(chars[0]);
-        int y = Integer.parseInt(chars[1]);
+    public void add(int x, int y, char userChar) {
         field[x - 1][y - 1] = userChar;
     }
 }
