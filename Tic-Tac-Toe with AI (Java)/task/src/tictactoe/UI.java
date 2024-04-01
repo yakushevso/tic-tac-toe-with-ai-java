@@ -2,6 +2,7 @@ package tictactoe;
 
 import tictactoe.bot.Bot;
 import tictactoe.bot.EasyBot;
+import tictactoe.bot.HardBot;
 import tictactoe.bot.MediumBot;
 
 import java.util.Arrays;
@@ -68,7 +69,7 @@ public class UI {
         while (true) {
             System.out.print("Input command: ");
             String[] input = SC.nextLine().split("\\s+");
-            Set<String> type = new HashSet<>(Arrays.asList("start", "user", "easy", "medium"));
+            Set<String> type = new HashSet<>(Arrays.asList("start", "user", "easy", "medium", "hard"));
 
             if (input.length == 1 && "exit".equals(input[0])
                     || input.length == 3 && type.contains(input[1]) && type.contains(input[2])) {
@@ -90,6 +91,9 @@ public class UI {
             case "medium" -> {
                 return readMoveBot(new MediumBot(logic, field.getFieldCopy(), moveChar));
             }
+            case "hard" -> {
+                return readMoveBot(new HardBot(logic, field.getFieldCopy(), moveChar));
+            }
         }
 
         return null;
@@ -106,7 +110,7 @@ public class UI {
                 int y = Integer.parseInt(parts[1]);
 
                 return new int[]{x, y};
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                 System.out.println("You should enter numbers!");
             }
         }
@@ -126,11 +130,22 @@ public class UI {
     @SuppressWarnings("unused")
     public int readFieldSize() {
         while (true) {
-            if (SC.hasNextInt()) {
-                return SC.nextInt();
-            } else {
-                System.out.println("You should enter numbers!");
-                SC.next();
+            System.out.print("Enter the size of the field: ");
+            String inputSize = SC.nextLine();
+
+            try {
+                String[] parts = inputSize.split("\\s+");
+                int size = Integer.parseInt(parts[0]);
+
+                if (parts.length > 1) {
+                    System.out.println("You should enter one number!");
+                } else if (size < 3) {
+                    System.out.println("You should enter number at least three!");
+                } else {
+                    return size;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("You should enter number!");
             }
         }
     }

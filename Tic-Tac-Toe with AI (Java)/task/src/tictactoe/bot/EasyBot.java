@@ -9,6 +9,6 @@ public class EasyBot extends Bot {
     public int[] makeMoveBot() {
         System.out.println("Making move level \"easy\"");
 
-        return findRandomMove();
+        return randomMove();
     }
 }

@@ -7,7 +7,7 @@ import java.util.Random;
 public abstract class Bot {
     protected char[][] field;
 
-    protected int[] findRandomMove() {
+    protected int[] randomMove() {
         Random random = new Random();
         List<int[]> freeCells = new ArrayList<>();
 

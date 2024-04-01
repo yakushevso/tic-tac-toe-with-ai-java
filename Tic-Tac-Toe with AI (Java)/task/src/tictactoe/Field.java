@@ -16,6 +16,11 @@ public class Field {
         verLineRight = "|";
     }
 
+    @SuppressWarnings("unused")
+    public int getSize() {
+        return size;
+    }
+
     public char[][] getFieldCopy() {
         char[][] fieldCopy = new char[size][size];
 

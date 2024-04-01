@@ -11,7 +11,7 @@ public class Logic {
         return !(xWins() || oWins() || isDraw());
     }
 
-    private boolean isDraw() {
+    public boolean isDraw() {
         for (char[] chars : field) {
             for (int j = 0; j < field[0].length; j++) {
                 if ((chars[j] == ' ')) {
@@ -23,11 +23,11 @@ public class Logic {
         return !(xWins() || oWins());
     }
 
-    private boolean xWins() {
+    public boolean xWins() {
         return checkRows('X') || checkColumns('X') || checkDiagonals('X');
     }
 
-    private boolean oWins() {
+    public boolean oWins() {
         return checkRows('O') || checkColumns('O') || checkDiagonals('O');
     }
 
@@ -93,11 +93,12 @@ public class Logic {
     private boolean isCorrectRange(int[] move) {
         int x = move[0];
         int y = move[1];
+        int fieldSize = field.length;
 
-        if (x <= 3 && x >= 1 && y <= 3 && y >= 1) {
+        if (x <= fieldSize && x >= 1 && y <= fieldSize && y >= 1) {
             return true;
         } else {
-            System.out.println("Coordinates should be from 1 to 3!");
+            System.out.println("Coordinates should be from 1 to " + fieldSize + "!");
             return false;
         }
     }

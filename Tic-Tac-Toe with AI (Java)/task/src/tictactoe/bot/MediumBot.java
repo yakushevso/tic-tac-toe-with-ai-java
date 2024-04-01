@@ -16,23 +16,23 @@ public class MediumBot extends Bot {
     public int[] makeMoveBot() {
         System.out.println("Making move level \"medium\"");
 
-        int[] winningMove = findWinningMove(moveChar);
+        int[] winMove = findWinMove(moveChar);
 
-        if (winningMove != null) {
-            return winningMove;
+        if (winMove != null) {
+            return winMove;
         }
 
         char opponentChar = (moveChar == 'X') ? 'O' : 'X';
-        int[] blockingMove = findWinningMove(opponentChar);
+        int[] blockMove = findWinMove(opponentChar);
 
-        if (blockingMove != null) {
-            return blockingMove;
+        if (blockMove != null) {
+            return blockMove;
         }
 
-        return findRandomMove();
+        return randomMove();
     }
 
-    private int[] findWinningMove(char moveChar) {
+    private int[] findWinMove(char moveChar) {
         for (int x = 0; x < field.length; x++) {
             for (int y = 0; y < field[0].length; y++) {
                 if (field[x][y] == ' ' && tryMove(x, y, moveChar)) {
