@@ -14,7 +14,7 @@ public class Logic {
     private boolean isDraw() {
         for (char[] chars : field) {
             for (int j = 0; j < field[0].length; j++) {
-                if ((chars[j] == '_') || (chars[j] == ' ')) {
+                if ((chars[j] == ' ')) {
                     return false;
                 }
             }
@@ -90,18 +90,6 @@ public class Logic {
         return isCorrectRange(move) && isEmpty(move);
     }
 
-    public int[] convertToIntegers(String move) {
-        try {
-            String[] chars = move.split(" ");
-            int x = Integer.parseInt(chars[0]);
-            int y = Integer.parseInt(chars[1]);
-            return new int[]{x, y};
-        } catch (Exception e) {
-            System.out.println("You should enter numbers!");
-            return null;
-        }
-    }
-
     private boolean isCorrectRange(int[] move) {
         int x = move[0];
         int y = move[1];
@@ -118,7 +106,7 @@ public class Logic {
         int x = move[0];
         int y = move[1];
 
-        if (field[x - 1][y - 1] == ' ' || field[x - 1][y - 1] == '_') {
+        if (field[x - 1][y - 1] == ' ') {
             return true;
         } else {
             System.out.println("This cell is occupied! Choose another one!");

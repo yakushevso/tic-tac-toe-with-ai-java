@@ -16,8 +16,15 @@ public class Field {
         verLineRight = "|";
     }
 
-    public char[][] getState() {
-        return field;
+    public char[][] getFieldCopy() {
+        char[][] fieldCopy = new char[size][size];
+
+        for (int i = 0; i < size; i++) {
+            System.arraycopy(field[i], 0, fieldCopy[i],
+                    0, field[i].length);
+        }
+
+        return fieldCopy;
     }
 
     public void init() {
@@ -44,7 +51,7 @@ public class Field {
         System.out.println(horLine);
     }
 
-    public void add(int x, int y, char userChar) {
-        field[x - 1][y - 1] = userChar;
+    public void add(int x, int y, char moveChar) {
+        field[x - 1][y - 1] = moveChar;
     }
 }

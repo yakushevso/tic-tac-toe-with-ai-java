@@ -1,43 +1,52 @@
 package tictactoe;
 
-import java.util.*;
+import tictactoe.bot.Bot;
+import tictactoe.bot.EasyBot;
+import tictactoe.bot.MediumBot;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 
 public class UI {
     private final Scanner SC = new Scanner(System.in);
+    private final Field field = new Field(3);
+    private final Logic logic = new Logic();
 
     public void run() {
-        Field field = new Field(3);
-        Logic logic = new Logic();
-
-        field.init();
-        logic.update(field.getState());
-
         while (true) {
-            String[] input = readInput();
+            field.init();
+            logic.update(field.getFieldCopy());
 
-            switch (input[0]) {
+            String[] input = readInput();
+            String mode = input[0];
+
+            switch (mode) {
                 case "start" -> {
                     field.print();
 
+                    String fPlayer = input[1];
+                    String sPlayer = input[2];
                     boolean playerTurn = true;
 
                     while (logic.isNotFinished()) {
                         int[] move;
 
                         if (playerTurn) {
-                            move = readMove(field, logic, input[1]);
+                            move = readMove(fPlayer, 'X');
                         } else {
-                            move = readMove(field, logic, input[2]);
+                            move = readMove(sPlayer, 'O');
                         }
 
                         if (move != null && logic.isValidMove(move)) {
                             if (playerTurn) {
-                                makeMove(field, move, 'X');
+                                makeMove(move, 'X');
                             } else {
-                                makeMove(field, move, 'O');
+                                makeMove(move, 'O');
                             }
 
-                            logic.update(field.getState());
+                            logic.update(field.getFieldCopy());
                             field.print();
 
                             playerTurn = !playerTurn;
@@ -59,7 +68,7 @@ public class UI {
         while (true) {
             System.out.print("Input command: ");
             String[] input = SC.nextLine().split("\\s+");
-            Set<String> type = new HashSet<>(Arrays.asList("start", "user", "easy"));
+            Set<String> type = new HashSet<>(Arrays.asList("start", "user", "easy", "medium"));
 
             if (input.length == 1 && "exit".equals(input[0])
                     || input.length == 3 && type.contains(input[1]) && type.contains(input[2])) {
@@ -70,35 +79,48 @@ public class UI {
         }
     }
 
-    private int[] readMove(Field field, Logic logic, String player) {
+    private int[] readMove(String player, char moveChar) {
         switch (player) {
             case "user" -> {
-                return logic.convertToIntegers(readMoveUser());
+                return readMoveUser();
             }
             case "easy" -> {
-                return readMoveBot(new EasyBot(3), field.getState());
+                return readMoveBot(new EasyBot(field.getFieldCopy()));
+            }
+            case "medium" -> {
+                return readMoveBot(new MediumBot(logic, field.getFieldCopy(), moveChar));
             }
         }
 
         return null;
     }
 
-    public String readMoveUser() {
-        System.out.print("Enter the coordinates: ");
-        return SC.nextLine();
+    public int[] readMoveUser() {
+        while (true) {
+            System.out.print("Enter the coordinates: ");
+            String input = SC.nextLine();
+
+            try {
+                String[] parts = input.split("\\s+");
+                int x = Integer.parseInt(parts[0]);
+                int y = Integer.parseInt(parts[1]);
+
+                return new int[]{x, y};
+            } catch (NumberFormatException e) {
+                System.out.println("You should enter numbers!");
+            }
+        }
     }
 
-    public void makeMove(Field field, int[] move, char userChar) {
+    public void makeMove(int[] move, char moveChar) {
         int x = move[0];
         int y = move[1];
 
-        field.add(x, y, userChar);
+        field.add(x, y, moveChar);
     }
 
-    public int[] readMoveBot(Bot bot, char[][] field) {
-        System.out.println("Making move level \"easy\"");
-
-        return bot.makeMove(field);
+    public int[] readMoveBot(Bot bot) {
+        return bot.makeMoveBot();
     }
 
     @SuppressWarnings("unused")
